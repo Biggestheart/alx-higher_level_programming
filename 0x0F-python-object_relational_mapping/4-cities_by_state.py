@@ -1,20 +1,21 @@
 #!/usr/bin/python3
-"""
-4-cities_by_state module
-"""
+""" Lists_all the_cities_from_the_database hbtn_0e_4_usa."""
+
+from sys import argv
 import MySQLdb
-import sys
 
-if __name__ == '__main__':
-    db = MySQLdb.connect(host='localhost', port=3306,
-                         user=sys.argv[1], passwd=sys.argv[2], db=sys.argv[3])
-
+if __name__ == "__main__":
+    db = MySQLdb.connect(
+            host='localhost',
+            port=3306,
+            user=argv[1],
+            passwd=argv[2],
+            db=argv[3],
+            charset='utf8')
     cur = db.cursor()
-    cur.execute("""SELECT cities.id, cities.name, states.name FROM
-                cities INNER JOIN states ON states.id=cities.state_id
-                ORDER BY cities.id ASC""")
-    rows = cur.fetchall()
-    for row in rows:
-        print(row)
-    cur.close()
-    db.close()
+    cur.execute("SELECT `cur`.`id`, `cur`.`name`, `st`.`name` \
+                FROM `cities` as `cur` \
+                INNER JOIN `states` as `st` \
+                ON `cur`.`state_id` = `st`.`id` \
+                ORDER BY `cur`.`id`")
+    [print(city) for city in cur.fetchall()]
